@@ -1,19 +1,15 @@
 // <copyright file="ObservationServiceCollectionExtensions.cs" company="Atya">
 // Copyright (c) Atya. All rights reserved.
 // </copyright>
-using Atya.Diagnostics.Logging.DependencyInjection;
-using Atya.Diagnostics.Metrics.DependencyInjection;
 using Atya.Diagnostics.Metrics.Options;
-using Atya.Diagnostics.Observation.Internal;
+using Atya.Diagnostics.Observation.Models;
 using Atya.Diagnostics.Observation.Options;
-using Atya.Diagnostics.Tracing.DependencyInjection;
 using Atya.Diagnostics.Tracing.Options;
 using Atya.Foundation.Guards;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 
-namespace Atya.Diagnostics.Observation.DependencyInjection;
+namespace Microsoft.Extensions.DependencyInjection;
 
 /// <summary>
 /// Provides dependency injection extensions for registering the observation package.
@@ -56,10 +52,6 @@ public static class ObservationServiceCollectionExtensions
 
         _ = services.AddOptions<ObservationOptions>()
             .Configure(options => configure?.Invoke(options))
-            .ValidateDataAnnotations()
-            .Validate(
-                static options => !string.IsNullOrWhiteSpace(options.ServiceName),
-                "ObservationOptions.ServiceName cannot be null or whitespace.")
             .ValidateOnStart();
 
         services.TryAddEnumerable(ServiceDescriptor.Singleton<IValidateOptions<ObservationOptions>, ObservationOptionsValidator>());
@@ -68,22 +60,6 @@ public static class ObservationServiceCollectionExtensions
             var options = serviceProvider.GetRequiredService<IOptions<ObservationOptions>>().Value;
             return ObservationIdentityResolver.Resolve(options);
         });
-
-        _ = services.AddOptions<TracingOptions>()
-            .Configure<IOptions<ObservationOptions>>((tracingOptions, observationOptionsAccessor) =>
-            {
-                var identity = ObservationIdentityResolver.Resolve(observationOptionsAccessor.Value);
-                tracingOptions.ActivitySourceName = identity.ActivitySourceName;
-                tracingOptions.ActivitySourceVersion = identity.ServiceVersion;
-            });
-
-        _ = services.AddOptions<MetricsOptions>()
-            .Configure<IOptions<ObservationOptions>>((metricsOptions, observationOptionsAccessor) =>
-            {
-                var identity = ObservationIdentityResolver.Resolve(observationOptionsAccessor.Value);
-                metricsOptions.MeterName = identity.MeterName;
-                metricsOptions.MeterVersion = identity.ServiceVersion;
-            });
 
         var bootstrapOptions = new ObservationOptions();
         configure?.Invoke(bootstrapOptions);
@@ -110,6 +86,14 @@ public static class ObservationServiceCollectionExtensions
                 options.ActivitySourceName = bootstrapIdentity.ActivitySourceName;
                 options.ActivitySourceVersion = bootstrapIdentity.ServiceVersion;
             });
+
+            _ = services.AddOptions<TracingOptions>()
+                .Configure<IOptions<ObservationOptions>>((tracingOptions, observationOptionsAccessor) =>
+                {
+                    var identity = ObservationIdentityResolver.Resolve(observationOptionsAccessor.Value);
+                    tracingOptions.ActivitySourceName = identity.ActivitySourceName;
+                    tracingOptions.ActivitySourceVersion = identity.ServiceVersion;
+                });
         }
 
         if (bootstrapOptions.ConfigureMetrics)
@@ -119,6 +103,14 @@ public static class ObservationServiceCollectionExtensions
                 options.MeterName = bootstrapIdentity.MeterName;
                 options.MeterVersion = bootstrapIdentity.ServiceVersion;
             });
+
+            _ = services.AddOptions<MetricsOptions>()
+                .Configure<IOptions<ObservationOptions>>((metricsOptions, observationOptionsAccessor) =>
+                {
+                    var identity = ObservationIdentityResolver.Resolve(observationOptionsAccessor.Value);
+                    metricsOptions.MeterName = identity.MeterName;
+                    metricsOptions.MeterVersion = identity.ServiceVersion;
+                });
         }
 
         return services;

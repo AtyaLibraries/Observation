@@ -1,8 +1,6 @@
-using System.Reflection;
 using Atya.Diagnostics.Logging.Context;
 using Atya.Diagnostics.Metrics.Abstractions;
 using Atya.Diagnostics.Metrics.Options;
-using Atya.Diagnostics.Observation.DependencyInjection;
 using Atya.Diagnostics.Observation.Models;
 using Atya.Diagnostics.Observation.Options;
 using Atya.Diagnostics.Tracing.Abstractions;
@@ -206,6 +204,32 @@ public sealed class ObservationServiceCollectionExtensionsTests
     }
 
     [Fact]
+    public void AddAtyaObservation_Should_Not_Configure_Tracing_And_Metrics_Options_When_Disabled()
+    {
+        var services = new ServiceCollection();
+
+        _ = services.AddAtyaObservation(options =>
+        {
+            options.ServiceName = "Samples.OrderProcessor";
+            options.ServiceVersion = "1.2.3";
+            options.ConfigureTracing = false;
+            options.ConfigureMetrics = false;
+        });
+
+        using var provider = services.BuildServiceProvider();
+
+        var tracingOptions = provider.GetRequiredService<IOptions<TracingOptions>>().Value;
+        var metricsOptions = provider.GetRequiredService<IOptions<MetricsOptions>>().Value;
+        var defaultTracingOptions = new TracingOptions();
+        var defaultMetricsOptions = new MetricsOptions();
+
+        _ = tracingOptions.ActivitySourceName.Should().Be(defaultTracingOptions.ActivitySourceName);
+        _ = tracingOptions.ActivitySourceVersion.Should().Be(defaultTracingOptions.ActivitySourceVersion);
+        _ = metricsOptions.MeterName.Should().Be(defaultMetricsOptions.MeterName);
+        _ = metricsOptions.MeterVersion.Should().Be(defaultMetricsOptions.MeterVersion);
+    }
+
+    [Fact]
     public void AddAtyaObservation_Should_Allow_Disabling_Logging()
     {
         var services = new ServiceCollection();
@@ -257,6 +281,27 @@ public sealed class ObservationServiceCollectionExtensionsTests
     }
 
     [Fact]
+    public void AddAtyaObservation_Should_Run_IValidateOptions_Validator_When_ServiceName_Is_Empty()
+    {
+        var services = new ServiceCollection();
+
+        _ = services.AddAtyaObservation(options =>
+        {
+            options.ServiceName = string.Empty;
+        });
+
+        using var provider = services.BuildServiceProvider();
+
+        var validators = provider.GetServices<IValidateOptions<ObservationOptions>>();
+        var act = () => provider.GetRequiredService<IOptions<ObservationOptions>>().Value;
+
+        _ = validators.Should().ContainSingle(static validator =>
+            validator.GetType().Name.Contains("ObservationOptionsValidator", StringComparison.Ordinal));
+        _ = act.Should().Throw<OptionsValidationException>()
+            .WithMessage("*ServiceName*");
+    }
+
+    [Fact]
     public void ObservationOptionsValidator_Should_Return_Success_For_Valid_ServiceName()
     {
         var validator = CreateObservationOptionsValidator();
@@ -298,24 +343,18 @@ public sealed class ObservationServiceCollectionExtensionsTests
     [Fact]
     public void ObservationIdentityResolver_Should_Throw_When_Options_Are_Null()
     {
-        var resolve = GetObservationIdentityResolver();
+        var act = () => ObservationIdentityResolver.Resolve(null!);
 
-        var act = () => resolve.Invoke(null, [null]);
-
-        _ = act.Should().Throw<TargetInvocationException>()
-            .WithInnerException<ArgumentNullException>()
+        _ = act.Should().Throw<ArgumentNullException>()
             .WithParameterName("options");
     }
 
     [Fact]
     public void ObservationIdentityResolver_Should_Throw_When_ServiceName_Is_Whitespace()
     {
-        var resolve = GetObservationIdentityResolver();
+        var act = () => ObservationIdentityResolver.Resolve(new ObservationOptions());
 
-        var act = () => resolve.Invoke(null, [new ObservationOptions()]);
-
-        _ = act.Should().Throw<TargetInvocationException>()
-            .WithInnerException<ArgumentException>()
+        _ = act.Should().Throw<ArgumentException>()
             .WithParameterName(nameof(ObservationOptions.ServiceName));
     }
 
@@ -332,13 +371,5 @@ public sealed class ObservationServiceCollectionExtensionsTests
 
         return provider.GetServices<IValidateOptions<ObservationOptions>>()
             .Single(static validator => validator.GetType().Name.Contains("ObservationOptionsValidator", StringComparison.Ordinal));
-    }
-
-    private static MethodInfo GetObservationIdentityResolver()
-    {
-        return typeof(ObservationOptions)
-            .Assembly
-            .GetType("Atya.Diagnostics.Observation.Internal.ObservationIdentityResolver", throwOnError: true)!
-            .GetMethod("Resolve", BindingFlags.Public | BindingFlags.Static)!;
     }
 }

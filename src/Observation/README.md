@@ -38,7 +38,7 @@ dotnet add package Atya.Diagnostics.Observation
 ## Basic usage
 
 ```csharp
-using Atya.Diagnostics.Observation.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
 var services = new ServiceCollection();
 

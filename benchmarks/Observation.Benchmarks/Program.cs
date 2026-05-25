@@ -1,10 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
-using Atya.Diagnostics.Logging.DependencyInjection;
-using Atya.Diagnostics.Metrics.DependencyInjection;
 using Atya.Diagnostics.Metrics.Options;
-using Atya.Diagnostics.Observation.DependencyInjection;
 using Atya.Diagnostics.Observation.Models;
-using Atya.Diagnostics.Tracing.DependencyInjection;
 using Atya.Diagnostics.Tracing.Options;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
