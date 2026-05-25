@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using Atya.Diagnostics.Metrics.Abstractions;
-using Atya.Diagnostics.Observation.DependencyInjection;
 using Atya.Diagnostics.Tracing.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

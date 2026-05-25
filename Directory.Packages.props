@@ -25,11 +25,10 @@
   </ItemGroup>
   <ItemGroup Label="Runtime + integrations">
     <PackageVersion Include="Atya.Foundation.Guards" Version="1.0.0" />
-    <PackageVersion Include="Atya.Diagnostics.Logging" Version="1.0.0" />
-    <PackageVersion Include="Atya.Diagnostics.Metrics" Version="1.0.0" />
-    <PackageVersion Include="Atya.Diagnostics.Tracing" Version="1.0.0" />
+    <PackageVersion Include="Atya.Diagnostics.Logging" Version="1.0.1" />
+    <PackageVersion Include="Atya.Diagnostics.Metrics" Version="1.0.1" />
+    <PackageVersion Include="Atya.Diagnostics.Tracing" Version="1.0.1" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.8" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.8" />
-    <PackageVersion Include="Microsoft.Extensions.Options.DataAnnotations" Version="10.0.8" />
   </ItemGroup>
 </Project>

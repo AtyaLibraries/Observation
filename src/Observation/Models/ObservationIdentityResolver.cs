@@ -1,14 +1,21 @@
 // <copyright file="ObservationIdentityResolver.cs" company="Atya">
 // Copyright (c) Atya. All rights reserved.
 // </copyright>
-using Atya.Diagnostics.Observation.Models;
 using Atya.Diagnostics.Observation.Options;
 using Atya.Foundation.Guards;
 
-namespace Atya.Diagnostics.Observation.Internal;
+namespace Atya.Diagnostics.Observation.Models;
 
-internal static class ObservationIdentityResolver
+/// <summary>
+/// Resolves observation identity values from configured observation options.
+/// </summary>
+public static class ObservationIdentityResolver
 {
+    /// <summary>
+    /// Resolves the effective observation identity.
+    /// </summary>
+    /// <param name="options">The observation options.</param>
+    /// <returns>The resolved observation identity.</returns>
     public static ObservationIdentity Resolve(ObservationOptions options)
     {
         options = Guard.AgainstNull(options);
