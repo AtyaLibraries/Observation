@@ -1,8 +1,6 @@
 // <copyright file="ObservationOptions.cs" company="Atya">
 // Copyright (c) Atya. All rights reserved.
 // </copyright>
-using System.ComponentModel.DataAnnotations;
-
 namespace Atya.Diagnostics.Observation.Options;
 
 /// <summary>
@@ -13,7 +11,6 @@ public sealed class ObservationOptions
     /// <summary>
     /// Gets or sets the logical service name used across observation components.
     /// </summary>
-    [Required(AllowEmptyStrings = false)]
     public string ServiceName { get; set; } = string.Empty;
 
     /// <summary>
