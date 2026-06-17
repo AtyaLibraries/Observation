@@ -1,28 +1,28 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Atya.Build.Sdk">
 
   <PropertyGroup>
-    <AssemblyName>Atya.Diagnostics.Observation</AssemblyName>
+    <TargetFramework>net10.0</TargetFramework>
     <PackageId>Atya.Diagnostics.Observation</PackageId>
+    <AssemblyName>Atya.Diagnostics.Observation</AssemblyName>
     <RootNamespace>Atya.Diagnostics.Observation</RootNamespace>
     <IsPackable>true</IsPackable>
+    <Authors>Arsen Asulyan</Authors>
+    <Copyright>Copyright (c) 2026 Arsen Asulyan</Copyright>
+    <Description>Unified diagnostics observation helpers that compose logging, metrics, and tracing.</Description>
+    <PackageTags>dotnet;diagnostics;observability;logging;metrics;tracing;atya</PackageTags>
+    <RepositoryUrl>https://github.com/AtyaLibraries/Observation</RepositoryUrl>
+    <PackageProjectUrl>$(RepositoryUrl)</PackageProjectUrl>
 
-
-    <MinVerTagPrefix>v</MinVerTagPrefix>
+    <!-- MinVer derives the version from git tags (e.g. tag `v1.2.3` -> 1.2.3). -->
     <MinVerDefaultPreReleaseIdentifiers>alpha.0</MinVerDefaultPreReleaseIdentifiers>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="\" />
-    <None Include="..\..\LICENSE" Pack="true" PackagePath="\" Visible="false" />
+    <None Include="README.md" Pack="true" PackagePath="" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="" Visible="false" />
   </ItemGroup>
 
-  <ItemGroup Label="Analyzers + versioning (build-only, not published)">
-    <PackageReference Include="Atya.Governance.CodeQuality" PrivateAssets="all" />
-    <PackageReference Include="MinVer" PrivateAssets="all" Condition="'$(RepositoryHasGitDirectory)' == 'true'" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="all" Condition="'$(RepositoryHasGitDirectory)' == 'true'" />
-  </ItemGroup>
-
-  <ItemGroup>
+  <ItemGroup Label="Runtime dependencies">
     <PackageReference Include="Atya.Foundation.Guards" />
     <PackageReference Include="Atya.Diagnostics.Logging" />
     <PackageReference Include="Atya.Diagnostics.Metrics" />
