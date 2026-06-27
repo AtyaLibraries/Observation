@@ -1,6 +1,5 @@
-<Project Sdk="Atya.Build.Sdk">
+﻿<Project Sdk="Atya.Build.Sdk">
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <IsPackable>false</IsPackable>
     <UseAppHost>false</UseAppHost>
@@ -13,6 +12,8 @@
     <PackageReference Include="BenchmarkDotNet" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Observation\Observation.csproj" />
+    <ProjectReference Include="..\..\src\Observation\Observation.csproj">
+      <AdditionalProperties>Configuration=Release</AdditionalProperties>
+    </ProjectReference>
   </ItemGroup>
 </Project>

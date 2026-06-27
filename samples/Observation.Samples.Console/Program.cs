@@ -30,6 +30,24 @@ internal sealed class OrderProcessor(
     IActivitySourceAccessor activitySourceAccessor,
     IMeterAccessor meterAccessor)
 {
+    private static readonly Action<ILogger, Guid, Exception?> StartingOrderProcessing =
+        LoggerMessage.Define<Guid>(
+            LogLevel.Information,
+            new EventId(1000, nameof(StartingOrderProcessing)),
+            "Starting order processing for {OrderId}.");
+
+    private static readonly Action<ILogger, Guid, Exception?> OrderProcessingCompleted =
+        LoggerMessage.Define<Guid>(
+            LogLevel.Information,
+            new EventId(1001, nameof(OrderProcessingCompleted)),
+            "Order processing completed for {OrderId}.");
+
+    private static readonly Action<ILogger, Guid, Exception?> OrderProcessingFailed =
+        LoggerMessage.Define<Guid>(
+            LogLevel.Error,
+            new EventId(1002, nameof(OrderProcessingFailed)),
+            "Order processing failed for {OrderId}.");
+
     private readonly ILogger<OrderProcessor> _logger = logger;
     private readonly IActivitySourceAccessor _activitySourceAccessor = activitySourceAccessor;
     private readonly Counter<long> _requests = meterAccessor.CreateCounter<long>("orders.processed", description: "Total number of processed orders.");
@@ -46,7 +64,7 @@ internal sealed class OrderProcessor(
         using var activity = _activitySourceAccessor.StartInternalActivity("ProcessOrder");
         var startedAt = Stopwatch.GetTimestamp();
 
-        _logger.LogInformation("Starting order processing for {OrderId}.", orderId);
+        StartingOrderProcessing(_logger, orderId, null);
         _requests.Add(1, new KeyValuePair<string, object?>("operation", "ProcessOrder"));
 
         try
@@ -57,7 +75,7 @@ internal sealed class OrderProcessor(
                 new KeyValuePair<string, object?>("operation", "ProcessOrder"),
                 new KeyValuePair<string, object?>("outcome", "success"));
 
-            _logger.LogInformation("Order processing completed for {OrderId}.", orderId);
+            OrderProcessingCompleted(_logger, orderId, null);
         }
         catch (Exception exception)
         {
@@ -66,7 +84,7 @@ internal sealed class OrderProcessor(
                 new KeyValuePair<string, object?>("operation", "ProcessOrder"),
                 new KeyValuePair<string, object?>("outcome", "failure"));
 
-            _logger.LogError(exception, "Order processing failed for {OrderId}.", orderId);
+            OrderProcessingFailed(_logger, orderId, exception);
             throw;
         }
     }
