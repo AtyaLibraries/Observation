@@ -6,7 +6,7 @@
         "type": "Direct",
         "requested": "[1.0.1, )",
         "resolved": "1.0.1",
-        "contentHash": "vrTSM2a/rWa1hsuhRPhqzCYFJTXuFEs9SPox9I1//r3Rja7Gm0CbukbpXtxD8yiCUti/YjkPwZJkxGmObL1UHg==",
+        "contentHash": "PlrizTJNeGkV0jTc4iw5ceswuGqH2wV3dDfo+LUcrYCjYtgbtT8ycFfNWV4ZuPoZR5vSj4b0LGQu5dGK/B98LA==",
         "dependencies": {
           "Atya.Foundation.Guards": "1.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.8",
@@ -17,7 +17,7 @@
         "type": "Direct",
         "requested": "[1.0.1, )",
         "resolved": "1.0.1",
-        "contentHash": "3iI7LyV9j1+7QlKj4vsKTcJA+nXg14yBzcqaDYGvUuTrKh4o13pQZlVUr5ySORwMlk3x04sSfrglmRgom6PTBA==",
+        "contentHash": "1H70t3SEcoxIPI1bD/i9Y7+NnOnAMM3YqwuK1DpHoqH+aqX5RIbDOarACJ60oyhz6HjIIGTiypN4GqhgDzRmtg==",
         "dependencies": {
           "Atya.Foundation.Guards": "1.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.8",
@@ -28,7 +28,7 @@
         "type": "Direct",
         "requested": "[1.0.1, )",
         "resolved": "1.0.1",
-        "contentHash": "I2vgsRnPCYiBmbba3vZOdAFnXJ4r7vBp1cj4TCVyqo/1o2JVEjQF7ySuKmR8RgwNx4lQKTmimNnwAr3ZrbYzOw==",
+        "contentHash": "8lGM/J451JmkWZJRDYtxJuKXcSs0P18igKB9S3EhAwUM5X4v59SIkb0Lg9eRYTae7+vQcPJvOVQNqfwXQvh/Hg==",
         "dependencies": {
           "Atya.Foundation.Guards": "1.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.8",
@@ -39,13 +39,13 @@
         "type": "Direct",
         "requested": "[1.0.0, )",
         "resolved": "1.0.0",
-        "contentHash": "RvOzSSZ0/O2Qmp43cUJ/M2XFYci9ZMgUvR4A9Wio0iMEDKkSuPfUGA9YCA785KN1nqP7KXquwh890GL/Rv02Zg=="
+        "contentHash": "hLGlr7iPEAVMFEzNf2yGxEuJld/UGwBuC16TGyw3EGYrTQYf1ub3y24eoiFB4BGLQQDw1ll9hPoAdgVdJQEifQ=="
       },
       "Atya.Governance.CodeQuality": {
         "type": "Direct",
         "requested": "[1.1.0, )",
         "resolved": "1.1.0",
-        "contentHash": "7mseOTscZ82kfDJ3dj9tZXj+Z2t4UEgntOhgkOu+nJrgC9UF7vR14xs4kCi8NzDGXtxVWMqK8pB8pJsyZ7yNhg=="
+        "contentHash": "vWSyW0u93lQTDN32fJmPBL+8vPcPCUxkM5nJ+lKFlAjrA0KhDQN8Gg/CQwxrUgVQ4mnDy8oIo9wrA0DXLqFykg=="
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions": {
         "type": "Direct",
