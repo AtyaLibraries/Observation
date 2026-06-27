@@ -23,10 +23,10 @@ public sealed record ObservationIdentity
         string activitySourceName,
         string meterName)
     {
-        this.ServiceName = Guard.AgainstNullOrWhiteSpace(serviceName).Trim();
-        this.ServiceVersion = string.IsNullOrWhiteSpace(serviceVersion) ? null : serviceVersion.Trim();
-        this.ActivitySourceName = Guard.AgainstNullOrWhiteSpace(activitySourceName).Trim();
-        this.MeterName = Guard.AgainstNullOrWhiteSpace(meterName).Trim();
+        ServiceName = Guard.AgainstNullOrWhiteSpace(serviceName).Trim();
+        ServiceVersion = string.IsNullOrWhiteSpace(serviceVersion) ? null : serviceVersion.Trim();
+        ActivitySourceName = Guard.AgainstNullOrWhiteSpace(activitySourceName).Trim();
+        MeterName = Guard.AgainstNullOrWhiteSpace(meterName).Trim();
     }
 
     /// <summary>
