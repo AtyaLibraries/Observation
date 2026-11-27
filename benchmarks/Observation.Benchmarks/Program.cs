@@ -13,14 +13,24 @@ using Microsoft.Extensions.Options;
 
 namespace Observation.Benchmarks;
 
+/// <summary>
+/// Runs the Atya.Diagnostics.Observation benchmark suite.
+/// </summary>
 public static class Program
 {
+    /// <summary>
+    /// Executes the benchmark suite.
+    /// </summary>
+    /// <param name="args">Command-line arguments passed to BenchmarkDotNet.</param>
     public static void Main(string[] args)
     {
         _ = BenchmarkRunner.Run<ObservationRegistrationBenchmarks>(args: args);
     }
 }
 
+/// <summary>
+/// Benchmarks observation service registration paths.
+/// </summary>
 [MemoryDiagnoser]
 [Config(typeof(BenchmarkConfig))]
 [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "BenchmarkDotNet requires benchmark methods to be instance methods.")]
@@ -31,18 +41,28 @@ public class ObservationRegistrationBenchmarks
 
     private ServiceProvider _provider = null!;
 
+    /// <summary>
+    /// Builds the warm service provider used by benchmarks.
+    /// </summary>
     [GlobalSetup]
     public void Setup()
     {
         this._provider = CreateObservationServices().BuildServiceProvider();
     }
 
+    /// <summary>
+    /// Disposes benchmark services.
+    /// </summary>
     [GlobalCleanup]
     public void Cleanup()
     {
         this._provider.Dispose();
     }
 
+    /// <summary>
+    /// Registers the lower-level logging, tracing, and metrics services directly.
+    /// </summary>
+    /// <returns>The service count after registration.</returns>
     [Benchmark(Baseline = true)]
     public int DirectLowerLevelRegistration()
     {
@@ -63,6 +83,10 @@ public class ObservationRegistrationBenchmarks
         return services.Count;
     }
 
+    /// <summary>
+    /// Registers observation services through the aggregate extension.
+    /// </summary>
+    /// <returns>The service count after registration.</returns>
     [Benchmark]
     public int ObservationRegistration()
     {
@@ -71,6 +95,10 @@ public class ObservationRegistrationBenchmarks
         return services.Count;
     }
 
+    /// <summary>
+    /// Builds a provider and resolves the observation identity.
+    /// </summary>
+    /// <returns>The resolved observation identity.</returns>
     [Benchmark]
     public ObservationIdentity BuildProviderAndResolveIdentity()
     {
@@ -79,6 +107,10 @@ public class ObservationRegistrationBenchmarks
         return provider.GetRequiredService<ObservationIdentity>();
     }
 
+    /// <summary>
+    /// Resolves mapped tracing and metrics options from a warm provider.
+    /// </summary>
+    /// <returns>The mapped activity source and meter names.</returns>
     [Benchmark]
     public (string? ActivitySourceName, string? MeterName) ResolveMappedOptionsFromWarmProvider()
     {
